@@ -13,6 +13,7 @@ zuul:
     api-docserver:
       path: /docserver/**
       serviceId: doctor-service
+  ignored-patterns: /**/hello/**  # /hello不能直接路由
 
 eureka:
   client:

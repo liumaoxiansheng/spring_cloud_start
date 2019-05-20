@@ -19,18 +19,25 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Component
 public class AccessFilter extends ZuulFilter {
+    /**
+     *
+     * @return  pre:可以在请求被路由之前调用
+     *          routing：路由请求是调用
+     *          post：在routing和error之间调用
+     *          error：处理请求时发生错误是被调用
+     */
     @Override
     public String filterType() {
         return "pre";
     }
 
     @Override
-    public int filterOrder() {
+    public int filterOrder() { // 过滤优先级，越小优先级越高
         return 0;
     }
 
     @Override
-    public boolean shouldFilter() {
+    public boolean shouldFilter() { // 确定该过滤器是否要执行
         return true;
     }
 

@@ -1,8 +1,10 @@
 package com.demo.controller;
 
 import com.demo.Doctor;
+import com.demo.Student;
 import com.demo.pojo.User;
 import com.demo.service.DoctorService;
+import com.demo.service.IStudentService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 /**
@@ -28,12 +32,14 @@ public class UserController {
     private DoctorService doctorService;
     @Autowired
     private RestTemplate restTemplate;
+
+
     @RequestMapping("/findOne/{id}")
     @HystrixCommand(fallbackMethod = "localMethod")
     public Doctor findOne(@PathVariable("id") int id){
         System.out.println(id);
         // 通过服务名调用，eureka帮我们找
-        Doctor doctor = restTemplate.getForObject("http://doctor-service/doctor/getOne/"+id, Doctor.class);
+       // Doctor doctor = restTemplate.getForObject("http://doctor-service/doctor/getOne/"+id, Doctor.class);
         Doctor param=new Doctor();
         param.setDoctorId(id);
         param.setDoctorName("张三丰");
@@ -45,9 +51,27 @@ public class UserController {
             add("doctorId",id);
         }};*/
       //Doctor doctor = restTemplate.postForObject("http://doctor-service/doctor/add", param, Doctor.class);
-       // Doctor doctor = doctorService.getOne(id);
+        Doctor doctor = doctorService.getOne(id);
         System.out.println(doctor);
         return doctor;
+    }
+
+
+    @RequestMapping("/findOneStudent")
+    @HystrixCommand(fallbackMethod = "localFindOneStudent")
+    public Student findOneStudent(@RequestParam("id") Long id){
+        System.out.println(id);
+        // 通过服务名调用，eureka帮我们找
+        // Doctor doctor = restTemplate.getForObject("http://doctor-service/doctor/getOne/"+id, Doctor.class);
+        // post请求参数体封装。
+       /* MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<String, Object>(){{
+            add("doctorName","张三丰");
+            add("doctorJob","太极剑");
+            add("doctorId",id);
+        }};*/
+        //Doctor doctor = restTemplate.postForObject("http://doctor-service/doctor/add", param, Doctor.class);
+        Student one = doctorService.getOne(id);
+        return one;
     }
 
     @RequestMapping("/add")
@@ -75,6 +99,15 @@ public class UserController {
        // final Doctor doctor = doctorService.add(param);
         System.out.println(doctor);
         return doctor;
+    }
+
+    private Student localFindOneStudent(Long id,Throwable e){ // 异常捕获
+        System.out.println("本地服务..localFindOneStudent..");
+        Student student = new Student();
+        student.setId(9999L);
+        student.setTime(LocalDateTime.now());
+        student.setName("default");
+        return student;
     }
 
     private Doctor localMethod(int id,Throwable e){ // 异常捕获

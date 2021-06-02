@@ -49,8 +49,8 @@ public class AccessFilter extends ZuulFilter {
          String token = request.getParameter("token");
         if (StringUtils.isBlank(token)){
             log.info("未授权....");
-            context.setSendZuulResponse(false);
-            context.setResponseStatusCode(403);
+            // context.setSendZuulResponse(false);
+           // context.setResponseStatusCode(403);
             return null;
         }
         log.info("授权访问.....");

@@ -1,10 +1,12 @@
 package com.demo.service;
 
 import com.demo.Doctor;
+import com.demo.Student;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -21,4 +23,7 @@ public interface DoctorService {
 
     @RequestMapping("/doctor/add")
     public Doctor add(@RequestBody Doctor doctor);
+
+    @RequestMapping("/student/getOne")
+    public Student getOne(@RequestParam("id") Long id);
 }

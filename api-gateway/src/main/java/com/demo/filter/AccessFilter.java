@@ -43,8 +43,17 @@ public class AccessFilter extends ZuulFilter {
 
     @Override
     public Object run() throws ZuulException {
-         RequestContext context = RequestContext.getCurrentContext();
-         HttpServletRequest request = context.getRequest();
+
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+        String upgradeHeader = request.getHeader("Upgrade");
+        if (null == upgradeHeader) {
+            upgradeHeader = request.getHeader("upgrade");
+        }
+        System.out.println("upgradeHeader = " + upgradeHeader);
+        if (null != upgradeHeader && "websocket".equalsIgnoreCase(upgradeHeader)) {
+            context.addZuulRequestHeader("connection", "Upgrade");
+        }
          log.info("请求过滤====》{},URL------>{}",request.getMethod(),request.getRequestURI().toString());
          String token = request.getParameter("token");
         if (StringUtils.isBlank(token)){
@@ -53,7 +62,7 @@ public class AccessFilter extends ZuulFilter {
            // context.setResponseStatusCode(403);
             return null;
         }
-        log.info("授权访问.....");
+       // log.info("授权访问.....");
         return null;
     }
 }

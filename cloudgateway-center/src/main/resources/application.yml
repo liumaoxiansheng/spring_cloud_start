@@ -1,0 +1,30 @@
+server:
+  port: 1004
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+#      routes:
+#        - id: flow-design-websocket
+#          uri: lb:ws://flow-design
+#         # order: 9000
+#          predicates:
+#            - Path=/flow/queueServer/**
+#          filters:
+#            - StripPrefix=1
+#        - id: flow-design-info
+#          uri: lb://flow-design
+#          predicates:
+#          - Path=/flow/queueServer/info
+#          - Path=/flow/**
+#          filters:
+#          - StripPrefix=1
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

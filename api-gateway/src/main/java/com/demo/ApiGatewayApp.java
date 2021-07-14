@@ -1,6 +1,7 @@
 package com.demo;
 
 import com.demo.filter.AccessFilter;
+import com.github.mthizo247.cloud.netflix.zuul.web.socket.EnableZuulWebSocket;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -15,7 +16,8 @@ import org.springframework.context.annotation.Bean;
  */
 // exclude = DataSourceAutoConfiguration.class 项目不需要数据源但又导入了依赖，所以排除自动配置，否则会报错
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@EnableZuulProxy // 开启网关服务
+//@EnableZuulProxy // 开启网关服务
+@EnableZuulWebSocket
 public class ApiGatewayApp {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApp.class,args);
